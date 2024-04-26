@@ -83,12 +83,11 @@ print(bucket)
 
 
 # Upload the raw datasets to S3
-large_input_data_uri = session.upload_data(
-    path="data/large/churn-dataset.csv", key_prefix=prefix + "/data/large"
-)
-small_input_data_uri = session.upload_data(
-    path="data/small/churn-dataset.csv", key_prefix=prefix + "/data/small"
-)
+largedf=pd.read_csv("data/large/churn-dataset.csv")
+largedf.info()
+
+large_input_data_uri = session.upload_data(path="data/large/churn-dataset.csv", key_prefix=prefix + "/data/large")
+small_input_data_uri = session.upload_data(path="data/small/churn-dataset.csv", key_prefix=prefix + "/data/small")
 test_data_uri = session.upload_data(path="data/test.csv", key_prefix=prefix + "/data/test")
 
 print("Large data set uploaded to ", large_input_data_uri)
