@@ -27,6 +27,6 @@ jobs:
       working-directory: ./src
       run: |
         pip install --no-cache-dir --upgrade awscli boto3 sagemaker joblib s3fs fsspec 
-        python training_pipeline.py 
+        python scripts/training_pipeline.py 
 
   
