@@ -82,7 +82,7 @@ print(bucket)
 # experiment_name = 'sklearn-exp-101-'+fg_ts_str
 # base_job_prefix = "clarify"
 
-
+print(pwd())
 # Upload the raw datasets to S3
 largedf=pd.read_csv("data/large/churn-dataset.csv")
 largedf.info()
