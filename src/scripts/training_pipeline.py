@@ -87,7 +87,7 @@ current_working_directory = os.getcwd()
 # print output to the console
 print(current_working_directory)
 # Upload the raw datasets to S3
-largedf=pd.read_csv("data/large/churn-dataset.csv")
+largedf=pd.read_csv("scripts/data/large/churn-dataset.csv")
 largedf.info()
 
 large_input_data_uri = session.upload_data(path="scripts/data/large/churn-dataset.csv", key_prefix=prefix + "/data/large")
