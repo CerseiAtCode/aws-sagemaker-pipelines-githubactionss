@@ -62,10 +62,12 @@ import pandas as pd
 session = sagemaker.session.Session()
 region = os.environ['AWS_DEFAULT_REGION']
 role = os.environ['IAM_ROLE_NAME']
-bucket = os.environ['BUCKET_NAME']
-prefix = os.environ['PREFIX']
+# bucket = os.environ['BUCKET_NAME']
+# prefix = os.environ['PREFIX']
+bucket="sagemker-vscode-experiment-rad"
+prefix="pipeline-in-notebook"
 model_package_group_name = "Churn-XGboost"  # Model name in model registry
-prefix = "sagemaker/Churn-xgboost"  # Prefix to S3 artifacts
+# prefix = "sagemaker/Churn-xgboost"  # Prefix to S3 artifacts
 pipeline_name = "ChurnPipeline"
 print(region)
 print(role)
