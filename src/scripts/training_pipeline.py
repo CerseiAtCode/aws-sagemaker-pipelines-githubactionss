@@ -72,7 +72,9 @@ pipeline_name = "ChurnPipeline"
 print(region)
 print(role)
 print(bucket)
+print(prefix)
 
+# This is new change
 # model_package_group_name = "sklearn-check-model-reg"
 # processing_instance = "ml.t3.medium"
 # training_instance = "ml.m4.xlarge"
