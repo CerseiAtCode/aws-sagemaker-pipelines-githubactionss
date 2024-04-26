@@ -57,6 +57,7 @@ from sagemaker.model import Model
 from sagemaker.workflow.model_step import ModelStep
 from sagemaker.workflow.steps import CreateModelStep
 import os
+import pandas as pd
 
 session = sagemaker.session.Session()
 region = os.environ['AWS_DEFAULT_REGION']
