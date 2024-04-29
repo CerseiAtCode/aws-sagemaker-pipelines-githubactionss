@@ -91,17 +91,20 @@ current_working_directory = os.getcwd()
 # print output to the console
 print(current_working_directory)
 # Upload the raw datasets to S3
-largedf=pd.read_csv("scripts/data/large/churn-dataset.csv")
+# largedf=pd.read_csv("scripts/data/large/churn-dataset.csv")
 
 
-large_input_data_uri = session.upload_data(path="scripts/data/large/churn-dataset.csv", key_prefix=prefix + "/data/large")
-small_input_data_uri = session.upload_data(path="scripts/data/small/churn-dataset.csv", key_prefix=prefix + "/data/small")
-test_data_uri = session.upload_data(path="scripts/data/test.csv", key_prefix=prefix + "/data/test")
+# large_input_data_uri = session.upload_data(path="scripts/data/large/churn-dataset.csv", key_prefix=prefix + "/data/large")
+# small_input_data_uri = session.upload_data(path="scripts/data/small/churn-dataset.csv", key_prefix=prefix + "/data/small")
+# test_data_uri = session.upload_data(path="scripts/data/test.csv", key_prefix=prefix + "/data/test")
 
-print("Large data set uploaded to ", large_input_data_uri)
-print("Small data set uploaded to ", small_input_data_uri)
-print("Test data set uploaded to ", test_data_uri)
+# print("Large data set uploaded to ", large_input_data_uri)
+# print("Small data set uploaded to ", small_input_data_uri)
+# print("Test data set uploaded to ", test_data_uri)
 
+large_input_data_uri = "s3://sagemaker-pipeline-githubactions/pipeline-experiment1/churn-dataset.csv"
+small_input_data_uri= "s3://sagemaker-pipeline-githubactions/pipeline-experiment1/churn-large-dataset.csv"
+test_data_uri="s3://sagemaker-pipeline-githubactions/pipeline-experiment1/test.csv"
 
 from sagemaker.workflow.parameters import (
     ParameterInteger,
