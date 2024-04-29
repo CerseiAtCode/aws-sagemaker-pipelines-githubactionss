@@ -67,7 +67,7 @@ role = os.environ['IAM_ROLE_NAME']
 bucket="sagemaker-pipeline-githubactions"
 prefix="pipeline-experiment1"
 model_package_group_name = "Churn-XGboost"  # Model name in model registry
-# prefix = "sagemaker/Churn-xgboost"  # Prefix to S3 artifacts
+
 pipeline_name = "ChurnPipeline"
 print(region)
 print(role)
@@ -204,7 +204,7 @@ step_preprocess_data = ProcessingStep(
 )
 
 
-#================================================train===========================
+#================================================train================================
 
 from sagemaker.inputs import TrainingInput
 from sagemaker.workflow.steps import TrainingStep
