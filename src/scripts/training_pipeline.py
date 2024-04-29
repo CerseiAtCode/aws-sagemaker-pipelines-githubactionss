@@ -101,7 +101,7 @@ test_data_uri = session.upload_data(path="scripts/data/test.csv", key_prefix=pre
 print("Large data set uploaded to ", large_input_data_uri)
 print("Small data set uploaded to ", small_input_data_uri)
 print("Test data set uploaded to ", test_data_uri)
-
+print("uploading the data to s3 from local completed")
 # large_input_data_uri = "s3://sagemaker-pipeline-githubactions/pipeline-experiment1/churn-dataset.csv"
 # small_input_data_uri= "s3://sagemaker-pipeline-githubactions/pipeline-experiment1/churn-large-dataset.csv"
 # test_data_uri="s3://sagemaker-pipeline-githubactions/pipeline-experiment1/test.csv"
