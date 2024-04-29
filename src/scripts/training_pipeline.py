@@ -200,7 +200,7 @@ step_preprocess_data = ProcessingStep(
             ),
         ),
     ],
-    code="preprocess.py",
+    code="scripts/preprocess.py",
 )
 
 
@@ -312,7 +312,7 @@ step_evaluate_model = ProcessingStep(
             ),
         ),
     ],
-    code="evaluate.py",
+    code="scripts/evaluate.py",
     property_files=[evaluation_report],
 )
 
