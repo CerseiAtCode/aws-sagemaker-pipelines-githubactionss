@@ -317,7 +317,7 @@ step_evaluate_model = ProcessingStep(
 )
 
 
-#==================================== Register model===============================
+#==================================== Register model==================================
 from sagemaker.model_metrics import MetricsSource, ModelMetrics
 from sagemaker.workflow.step_collections import RegisterModel
 
