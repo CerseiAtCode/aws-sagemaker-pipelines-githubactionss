@@ -63,12 +63,12 @@ session = sagemaker.session.Session()
 region = os.environ['AWS_DEFAULT_REGION']
 role = os.environ['IAM_ROLE_NAME']
 bucket = os.environ['BUCKET_NAME']
-prefix = os.environ['PREFIX']
+# prefix = os.environ['PREFIX']
 # bucket="sagemaker-pipeline-githubactions"
-# prefix="pipeline-experiment1"
-model_package_group_name = "github-Churn-xgboost-model-grp-"  # Model name in model registry
+prefix="pipeline-folder4"
+model_package_group_name = "github-Churn-xgboost-model-grp-1"  # Model name in model registry
 
-pipeline_name = "githubChurnPipeline"
+pipeline_name = "githubChurnPipeline-1"
 print(region)
 print(role)
 print(bucket)
@@ -193,7 +193,7 @@ step_preprocess_data = ProcessingStep(
 from sagemaker.inputs import TrainingInput
 from sagemaker.workflow.steps import TrainingStep
 from sagemaker.estimator import Estimator
-
+model_path=f"s3://{bucket}/{prefix}/churnmodel"
 # Fetch container to use for training
 image_uri = sagemaker.image_uris.retrieve(
     framework="xgboost",
@@ -211,6 +211,8 @@ xgb_estimator = Estimator(
     instance_count=1,
     role=role,
     disable_profiler=True,
+    output_path=model_path
+
 )
 
 xgb_estimator.set_hyperparameters(
