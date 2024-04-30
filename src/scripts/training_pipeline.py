@@ -379,7 +379,7 @@ pipeline = Pipeline(
     steps=[step_preprocess_data, step_train_model, step_evaluate_model, step_cond],
 )
 
-
+print("============================pipeline triggered=====================================")
 # Submit pipline
 pipeline.upsert(role_arn=role)
 
@@ -390,6 +390,7 @@ execution.wait()
 
 # List the execution steps to check out the status and artifacts:
 execution.list_steps()
+print("============================pipeline execution completed=====================================")
 
 
 
