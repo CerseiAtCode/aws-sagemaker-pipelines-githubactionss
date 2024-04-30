@@ -66,9 +66,9 @@ bucket = os.environ['BUCKET_NAME']
 prefix = os.environ['PREFIX']
 # bucket="sagemaker-pipeline-githubactions"
 # prefix="pipeline-experiment1"
-model_package_group_name = "rad-Churn-xgboost-model-grp-github"  # Model name in model registry
+model_package_group_name = "github-Churn-xgboost-model-grp-"  # Model name in model registry
 
-pipeline_name = "radChurnPipelinecicdgithub"
+pipeline_name = "githubChurnPipeline"
 print(region)
 print(role)
 print(bucket)
@@ -264,7 +264,7 @@ evaluate_model_processor = ScriptProcessor(
 # A PropertyFile is used to be able to reference outputs from a processing step, for instance to use in a condition step.
 # For more information, visit https://docs.aws.amazon.com/sagemaker/latest/dg/build-and-manage-propertyfile.html
 evaluation_report = PropertyFile(name="EvaluationReport", output_name="evaluation", path="evaluation.json")
-
+print(f"bucket uri before evaluate step: s3://{bucket}/{prefix}")
 # Use the evaluate_model_processor in a Sagemaker pipelines ProcessingStep.
 step_evaluate_model = ProcessingStep(
     name="Evaluate-Churn-Model",
@@ -287,7 +287,7 @@ step_evaluate_model = ProcessingStep(
                 on="/",
                 values=[
                     "s3://{}".format(bucket),
-                    prefix,
+                    "modeloutput",
                     ExecutionVariables.PIPELINE_EXECUTION_ID,
                     "evaluation-report",
                 ],
