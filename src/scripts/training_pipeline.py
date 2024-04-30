@@ -62,38 +62,22 @@ import pandas as pd
 session = sagemaker.session.Session()
 region = os.environ['AWS_DEFAULT_REGION']
 role = os.environ['IAM_ROLE_NAME']
-# bucket = os.environ['BUCKET_NAME']
-# prefix = os.environ['PREFIX']
-bucket="sagemaker-pipeline-githubactions"
-prefix="pipeline-experiment1"
-model_package_group_name = "Churn-XGboost"  # Model name in model registry
+bucket = os.environ['BUCKET_NAME']
+prefix = os.environ['PREFIX']
+# bucket="sagemaker-pipeline-githubactions"
+# prefix="pipeline-experiment1"
+model_package_group_name = "Churn-xgboost-model-grp"  # Model name in model registry
 
-pipeline_name = "ChurnPipeline"
+pipeline_name = "ChurnPipelinecicd"
 print(region)
 print(role)
 print(bucket)
 print(prefix)
 
-# This is new change
-# model_package_group_name = "sklearn-check-model-reg"
-# processing_instance = "ml.t3.medium"
-# training_instance = "ml.m4.xlarge"
-# databaseline_instance = "ml.c5.xlarge"
-# plname = "train-pipeline"
-# lambda_function_name = "get_latest_imageuri"
-# dtimem = gmtime()
-# fg_ts_str = str(strftime("%Y%m%d%H%M%S", dtimem))
-# experiment_name = 'sklearn-exp-101-'+fg_ts_str
-# base_job_prefix = "clarify"
-
 current_working_directory = os.getcwd()
-
-# print output to the console
 print(current_working_directory)
-# Upload the raw datasets to S3
-# largedf=pd.read_csv("scripts/data/large/churn-dataset.csv")
 
-
+# Upload the csv files to S3
 large_input_data_uri = session.upload_data(path="scripts/data/large/churn-dataset.csv", key_prefix=prefix + "/data/large")
 small_input_data_uri = session.upload_data(path="scripts/data/small/churn-dataset.csv", key_prefix=prefix + "/data/small")
 test_data_uri = session.upload_data(path="scripts/data/test.csv", key_prefix=prefix + "/data/test")
@@ -101,7 +85,7 @@ test_data_uri = session.upload_data(path="scripts/data/test.csv", key_prefix=pre
 print("Large data set uploaded to ", large_input_data_uri)
 print("Small data set uploaded to ", small_input_data_uri)
 print("Test data set uploaded to ", test_data_uri)
-print("uploading the data to s3 from local completed")
+print("============================uploading the data to s3 from local completed=====================================")
 # large_input_data_uri = "s3://sagemaker-pipeline-githubactions/pipeline-experiment1/churn-dataset.csv"
 # small_input_data_uri= "s3://sagemaker-pipeline-githubactions/pipeline-experiment1/churn-large-dataset.csv"
 # test_data_uri="s3://sagemaker-pipeline-githubactions/pipeline-experiment1/test.csv"
@@ -279,9 +263,7 @@ evaluate_model_processor = ScriptProcessor(
 # Create a PropertyFile
 # A PropertyFile is used to be able to reference outputs from a processing step, for instance to use in a condition step.
 # For more information, visit https://docs.aws.amazon.com/sagemaker/latest/dg/build-and-manage-propertyfile.html
-evaluation_report = PropertyFile(
-    name="EvaluationReport", output_name="evaluation", path="evaluation.json"
-)
+evaluation_report = PropertyFile(name="EvaluationReport", output_name="evaluation", path="evaluation.json")
 
 # Use the evaluate_model_processor in a Sagemaker pipelines ProcessingStep.
 step_evaluate_model = ProcessingStep(
