@@ -60,6 +60,7 @@ import io
 import os
 import pandas as pd
 import sys
+import time
 from time import gmtime, strftime, sleep
 from sagemaker.feature_store.feature_group import FeatureGroup
 from sagemaker.feature_store.inputs import FeatureParameter
