@@ -56,6 +56,7 @@ from sagemaker.workflow.lambda_step import (
 from sagemaker.model import Model
 from sagemaker.workflow.model_step import ModelStep
 from sagemaker.workflow.steps import CreateModelStep
+import io
 import os
 import pandas as pd
 import sys
