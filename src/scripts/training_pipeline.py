@@ -183,7 +183,7 @@ feature_query.run(query_string=query_string, output_location='s3://'+bucket+'/qu
 feature_query.wait()
 dataset = feature_query.as_dataframe()
 #save the dataset to data folder
-dataset.to_csv("data/large/large_churn_data.csv",index=False)
+dataset.to_csv("scripts/data/large/large_churn_data.csv",index=False)
 
 
 # Upload the csv files to S3
