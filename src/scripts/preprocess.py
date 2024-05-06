@@ -35,13 +35,13 @@ if __name__ == "__main__":
 
     # Convert categorical variables into dummy/indicator variables.
     model_data = pd.get_dummies(df)
-    print(model_data.columns)
+    logger.info(model_data.columns)
 
     # Create one binary classification target column
     model_data = pd.concat(
         [
-            model_data["churn_True."],
-            model_data.drop(["churn_False.", "churn_True."], axis=1),
+            model_data["churn_true."],
+            model_data.drop(["churn_false.", "churn_true."], axis=1),
         ],
         axis=1,
     )
