@@ -465,7 +465,9 @@ step_cond = ConditionStep(
     if_steps=[step_register_model],
     else_steps=[],
 )
-
+print("============================condition tested=====================================")
+print("Condition step")
+print(step_cond)
 #==================================pipeline==========================================
 from sagemaker.workflow.pipeline import Pipeline
 
@@ -491,12 +493,12 @@ print("============================pipeline triggered===========================
 pipeline.upsert(role_arn=role)
 
 # Execute pipeline using the default parameters.
-# execution = pipeline.start()
+execution = pipeline.start()
 
-# execution.wait()
+execution.wait()
 
 # List the execution steps to check out the status and artifacts:
-# execution.list_steps()
+execution.list_steps()
 print("============================pipeline execution completed=====================================")
 
 
