@@ -178,16 +178,16 @@ feature_query = churn_feature_group.athena_query()
 churn_table_name="churn_feature_group_03_09_18_09_1714727890"
 print(churn_table_name)
 query_string=f"SELECT * FROM \"sagemaker_featurestore\".\"{churn_table_name}\""
-print(len(query_string))
+# print(len(query_string))
 feature_query.run(query_string=query_string, output_location='s3://'+bucket+'/query_results/')
 feature_query.wait()
 dataset = feature_query.as_dataframe()
 #save the dataset to data folder
-dataset.to_csv("scripts/data/large/large_churn_data.csv",index=False)
-
-
+dataset[:300:].to_csv("scripts/data/large/churn-dataset.csv",index=False)
+dataset[301:400:].to_csv("scripts/data/small/churn-dataset.csv",index=False)
+dataset[401::].to_csv("scripts/data/test.csv",index=False)
 # Upload the csv files to S3
-large_input_data_uri = session.upload_data(path="scripts/data/large/large_churn_data.csv",bucket=bucket, key_prefix=prefix + "/data/large")
+large_input_data_uri = session.upload_data(path="scripts/data/large/churn-dataset.csv",bucket=bucket, key_prefix=prefix + "/data/large")
 small_input_data_uri = session.upload_data(path="scripts/data/small/churn-dataset.csv",bucket=bucket, key_prefix=prefix + "/data/small")
 test_data_uri = session.upload_data(path="scripts/data/test.csv",bucket=bucket, key_prefix=prefix + "/data/test")
 

@@ -28,10 +28,10 @@ if __name__ == "__main__":
     df = df.drop(["Phone"], axis=1)
 
     # Change the data type of "Area Code"
-    df["Area Code"] = df["Area Code"].astype(object)
+    df["Area_Code"] = df["Area_Code"].astype(object)
 
     # Drop several other columns
-    df = df.drop(["Day Charge", "Eve Charge", "Night Charge", "Intl Charge"], axis=1)
+    df = df.drop(["Day_Charge", "Eve_Charge", "Night_Charge", "Intl_Charge"], axis=1)
 
     # Convert categorical variables into dummy/indicator variables.
     model_data = pd.get_dummies(df)
@@ -39,8 +39,8 @@ if __name__ == "__main__":
     # Create one binary classification target column
     model_data = pd.concat(
         [
-            model_data["Churn?_True."],
-            model_data.drop(["Churn?_False.", "Churn?_True."], axis=1),
+            model_data["Churn_True."],
+            model_data.drop(["Churn_False.", "Churn_True."], axis=1),
         ],
         axis=1,
     )
