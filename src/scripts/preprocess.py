@@ -40,8 +40,8 @@ if __name__ == "__main__":
     # Create one binary classification target column
     model_data = pd.concat(
         [
-            model_data["churn_true."],
-            model_data.drop(["churn_false.", "churn_true."], axis=1),
+            model_data["churn_True."],
+            model_data.drop(["churn_False.", "churn_True."], axis=1),
         ],
         axis=1,
     )
