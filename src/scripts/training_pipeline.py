@@ -108,9 +108,9 @@ print(dataset.shape)
 
 
 #save the dataset to data folder
-dataset[:300:].to_csv("scripts/data/large/churn-dataset.csv",index=False)
-dataset[301:400:].to_csv("scripts/data/small/churn-dataset.csv",index=False)
-dataset[401::].to_csv("scripts/data/test.csv",index=False)
+dataset[:400:].to_csv("scripts/data/large/churn-dataset.csv",index=False)
+dataset[401::].to_csv("scripts/data/small/churn-dataset.csv",index=False)
+# dataset[401::].to_csv("scripts/data/test.csv",index=False)
 # Upload the csv files to S3
 large_input_data_uri = session.upload_data(path="scripts/data/large/churn-dataset.csv",bucket=bucket, key_prefix=prefix + "/data/large")
 small_input_data_uri = session.upload_data(path="scripts/data/small/churn-dataset.csv",bucket=bucket, key_prefix=prefix + "/data/small")
