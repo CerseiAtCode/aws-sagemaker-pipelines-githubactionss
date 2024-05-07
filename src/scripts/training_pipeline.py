@@ -83,107 +83,9 @@ print(prefix)
 current_working_directory = os.getcwd()
 print(current_working_directory)
 
-# # Upload the csv files to S3
-# large_input_data_uri = session.upload_data(path="scripts/data/large/churn-dataset.csv",bucket=bucket, key_prefix=prefix + "/data/large")
-# small_input_data_uri = session.upload_data(path="scripts/data/small/churn-dataset.csv",bucket=bucket, key_prefix=prefix + "/data/small")
-# test_data_uri = session.upload_data(path="scripts/data/test.csv",bucket=bucket, key_prefix=prefix + "/data/test")
-
-# print("Large data set uploaded to ", large_input_data_uri)
-# print("Small data set uploaded to ", small_input_data_uri)
-# print("Test data set uploaded to ", test_data_uri)
-print("============================uploading the data to s3 from local completed=====================================")
-# large_input_data_uri = "s3://sagemaker-pipeline-githubactions/pipeline-experiment1/churn-dataset.csv"
-# small_input_data_uri= "s3://sagemaker-pipeline-githubactions/pipeline-experiment1/churn-large-dataset.csv"
-# test_data_uri="s3://sagemaker-pipeline-githubactions/pipeline-experiment1/test.csv"
-
-# #Reading the csv from S3
-# s3_client = boto3.client("s3", region_name=region)
-# churn_file_key = (f"{prefix}/data/large/churn-dataset.csv")
-# churn_data_object = s3_client.get_object( Bucket=bucket, Key=churn_file_key)
-# churn_data = pd.read_csv(io.BytesIO(churn_data_object["Body"].read()))
-# churn_data.info()
-
-# # Creating the feature store from the csv file
-# new_col_names={}
-# for i in churn_data.columns:
-#     print(i.replace(" ","_"))
-#     new_col_names[i]=i.replace(" ","_")
-# print(new_col_names) 
-
-# churn_data.rename(columns = new_col_names, inplace = True) 
-# churn_data.rename(columns = {"Int'l_Plan":"Intl_Plan"}, inplace = True) 
-# churn_data.rename(columns = {"Churn?":"Churn"}, inplace = True) 
-# print(churn_data.columns)
-# churn_feature_group_name = "churn-feature-group-" + strftime("%d-%H-%M-%S", gmtime())
-# churn_feature_group = FeatureGroup(
-#     name=churn_feature_group_name, sagemaker_session=session
-# )
-# current_time_sec = int(round(time.time()))
-# record_identifier_feature_name = "Phone"
-# churn_data["EventTime"] = pd.Series([current_time_sec] * len(churn_data), dtype="float64")
-
-# churn_feature_group.load_feature_definitions(data_frame=churn_data)
-# churn_feature_group.create(
-#     s3_uri=f"s3://{bucket}/{prefix}/feature_store",
-#     record_identifier_name=record_identifier_feature_name,
-#     event_time_feature_name="EventTime",
-#     role_arn=role,
-#     enable_online_store=True,
-# )
-# #churn_feature_group.describe()
-
-# def check_feature_group_status(feature_group):
-#     status = feature_group.describe().get("FeatureGroupStatus")
-#     while status == "Creating":
-#         print("Waiting for Feature Group to be Created")
-#         time.sleep(5)
-#         status = feature_group.describe().get("FeatureGroupStatus")
-#     print(f"FeatureGroup {feature_group.name} successfully created.")
-
-
-# check_feature_group_status(churn_feature_group)
-# # Ingesting data in the feature store
-# churn_feature_group.update_feature_metadata(
-#     feature_name="Phone",
-#     description="The phone of a customer. It is also used in orders_feature_group.",
-#     parameter_additions=[FeatureParameter("idType", "primaryKey")],
-# )
-# churn_feature_group.ingest(data_frame=churn_data, max_workers=3, wait=True)
-
-
-# #Reading data from feature store
-# feature_query = churn_feature_group.athena_query()
-# churn_table_name=feature_query.table_name
-# print(churn_table_name)
-# query_string=f"SELECT * FROM \"sagemaker_featurestore\".\"{churn_table_name}\""
-# print(len(query_string))
-
-# feature_query.run(query_string=query_string, output_location='s3://'+bucket+'/query_results/')
-# feature_query.wait()
-# dataset = feature_query.as_dataframe()
-# dataset.head()
-
 #Get the dataset from the feature Store
 from sagemaker.feature_store.feature_group import FeatureGroup
 from sagemaker.feature_store.inputs import FeatureParameter
-
-
-
-# churn_feature_group_name="churn-feature-group-03-09-18-09"
-# churn_feature_group = FeatureGroup(
-#     name=churn_feature_group_name, sagemaker_session=session
-# )
-
-# feature_query = churn_feature_group.athena_query()
-# churn_table_name="churn_feature_group_03_09_18_09_1714727890"
-# print(churn_table_name)
-# query_string=f"SELECT * FROM \"sagemaker_featurestore\".\"{churn_table_name}\""
-# # print(len(query_string))
-# feature_query.run(query_string=query_string, output_location='s3://'+bucket+'/query_results/')
-# feature_query.wait()
-# dataset = feature_query.as_dataframe()
-# print(dataset.info())
-
 
 churn_feature_group_name="2churndata-feature-group-07-08-22-37"
 sagemaker_session = sagemaker.Session()
@@ -513,15 +415,15 @@ pipeline = Pipeline(
 
 print("============================pipeline triggered=====================================")
 # Submit pipline
-# pipeline.upsert(role_arn=role)
+pipeline.upsert(role_arn=role)
 
 # Execute pipeline using the default parameters.
-# execution = pipeline.start()
+execution = pipeline.start()
 
-# execution.wait()
+execution.wait()
 
 # List the execution steps to check out the status and artifacts:
-# execution.list_steps()
+execution.list_steps()
 print("============================pipeline execution completed=====================================")
 
 
