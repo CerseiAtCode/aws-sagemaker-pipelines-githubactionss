@@ -32,7 +32,7 @@ if __name__ == "__main__":
 
     # Drop several other columns
     df = df.drop(["day_charge", "eve_charge", "night_charge", "intl_charge"], axis=1)
-    print(df[["churn_True"]])
+    print(df[["churn_True."]])
     # Convert categorical variables into dummy/indicator variables.
     model_data = pd.get_dummies(df)
     logger.info(model_data.columns)

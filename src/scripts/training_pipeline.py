@@ -68,9 +68,9 @@ from sagemaker.feature_store.inputs import FeatureParameter
 session = sagemaker.session.Session()
 region = os.environ['AWS_DEFAULT_REGION']
 role = os.environ['IAM_ROLE_NAME']
-bucket = os.environ['BUCKET_NAME']
+# bucket = os.environ['BUCKET_NAME']
 # prefix = os.environ['PREFIX']
-# bucket="sagemaker-pipeline-githubactions"
+bucket="sagemaker-pipeline-githubactions"
 prefix="pipeline_with_featurestore"
 model_package_group_name = "github-Churn-xgboost-model-grp-1"  # Model name in model registry
 
@@ -169,19 +169,40 @@ from sagemaker.feature_store.inputs import FeatureParameter
 
 
 
-churn_feature_group_name="churn-feature-group-03-09-18-09"
+# churn_feature_group_name="churn-feature-group-03-09-18-09"
+# churn_feature_group = FeatureGroup(
+#     name=churn_feature_group_name, sagemaker_session=session
+# )
+
+# feature_query = churn_feature_group.athena_query()
+# churn_table_name="churn_feature_group_03_09_18_09_1714727890"
+# print(churn_table_name)
+# query_string=f"SELECT * FROM \"sagemaker_featurestore\".\"{churn_table_name}\""
+# # print(len(query_string))
+# feature_query.run(query_string=query_string, output_location='s3://'+bucket+'/query_results/')
+# feature_query.wait()
+# dataset = feature_query.as_dataframe()
+# print(dataset.info())
+
+
+churn_feature_group_name="churndata-feature-group-06-10-45-01"
 churn_feature_group = FeatureGroup(
     name=churn_feature_group_name, sagemaker_session=session
 )
 
 feature_query = churn_feature_group.athena_query()
-churn_table_name="churn_feature_group_03_09_18_09_1714727890"
+churn_table_name="churndata_feature_group_06_10_45_01_1714992445"
 print(churn_table_name)
 query_string=f"SELECT * FROM \"sagemaker_featurestore\".\"{churn_table_name}\""
 # print(len(query_string))
 feature_query.run(query_string=query_string, output_location='s3://'+bucket+'/query_results/')
 feature_query.wait()
 dataset = feature_query.as_dataframe()
+print(dataset.info())
+
+
+
+
 #save the dataset to data folder
 dataset[:300:].to_csv("scripts/data/large/churn-dataset.csv",index=False)
 dataset[301:400:].to_csv("scripts/data/small/churn-dataset.csv",index=False)
@@ -490,15 +511,15 @@ pipeline = Pipeline(
 
 print("============================pipeline triggered=====================================")
 # Submit pipline
-pipeline.upsert(role_arn=role)
+# pipeline.upsert(role_arn=role)
 
 # Execute pipeline using the default parameters.
-execution = pipeline.start()
+# execution = pipeline.start()
 
-execution.wait()
+# execution.wait()
 
 # List the execution steps to check out the status and artifacts:
-execution.list_steps()
+# execution.list_steps()
 print("============================pipeline execution completed=====================================")
 
 
