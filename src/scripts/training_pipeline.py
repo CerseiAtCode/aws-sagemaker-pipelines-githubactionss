@@ -185,17 +185,18 @@ from sagemaker.feature_store.inputs import FeatureParameter
 # print(dataset.info())
 
 
-churn_feature_group_name="churndata-feature-group-06-10-45-01"
+churn_feature_group_name="2churndata-feature-group-07-08-22-37"
+sagemaker_session = sagemaker.Session()
 churn_feature_group = FeatureGroup(
-    name=churn_feature_group_name, sagemaker_session=session
+    name=churn_feature_group_name, sagemaker_session=sagemaker_session
 )
 
 feature_query = churn_feature_group.athena_query()
-churn_table_name="churndata_feature_group_06_10_45_01_1714992445"
+churn_table_name=feature_query.table_name
 print(churn_table_name)
 query_string=f"SELECT * FROM \"sagemaker_featurestore\".\"{churn_table_name}\""
 # print(len(query_string))
-feature_query.run(query_string=query_string, output_location='s3://'+bucket+'/query_results/')
+feature_query.run(query_string=query_string, output_location='s3://'+bucket+'/query_results1/')
 feature_query.wait()
 dataset = feature_query.as_dataframe()
 print(dataset.head())
