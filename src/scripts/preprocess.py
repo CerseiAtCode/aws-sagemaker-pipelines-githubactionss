@@ -32,10 +32,10 @@ if __name__ == "__main__":
 
     # Drop several other columns
     df = df.drop(["day_charge", "eve_charge", "night_charge", "intl_charge"], axis=1)
-    
+    print(len(df.columns))
     # Convert categorical variables into dummy/indicator variables.
     model_data = pd.get_dummies(df)
-    print(df[["churn_True."]])
+    print("after dummies column",len(df.columns))
     logger.info(model_data.columns)
 
     # Create one binary classification target column
