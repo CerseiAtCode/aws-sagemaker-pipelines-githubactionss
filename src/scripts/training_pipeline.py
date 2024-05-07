@@ -198,7 +198,7 @@ query_string=f"SELECT * FROM \"sagemaker_featurestore\".\"{churn_table_name}\""
 feature_query.run(query_string=query_string, output_location='s3://'+bucket+'/query_results/')
 feature_query.wait()
 dataset = feature_query.as_dataframe()
-print(dataset.info())
+print(dataset.head())
 
 
 
