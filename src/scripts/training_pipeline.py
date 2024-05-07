@@ -102,9 +102,8 @@ query_result_folder="query_results1"+ strftime("%d-%H-%M-%S", gmtime())
 feature_query.run(query_string=query_string, output_location='s3://'+bucket+'/'+query_result_folder+'/')
 feature_query.wait()
 dataset = feature_query.as_dataframe()
+dataset = dataset.drop(["api_invocation_time", "eventtime", "write_time", "is_deleted"], axis=1)
 print(dataset.shape)
-
-
 
 
 #save the dataset to data folder
