@@ -102,7 +102,7 @@ query_result_folder="query_results1"+ strftime("%d-%H-%M-%S", gmtime())
 feature_query.run(query_string=query_string, output_location='s3://'+bucket+'/'+query_result_folder+'/')
 feature_query.wait()
 dataset = feature_query.as_dataframe()
-print(dataset.head())
+print(dataset.shape)
 
 
 
