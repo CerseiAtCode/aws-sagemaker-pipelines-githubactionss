@@ -71,7 +71,7 @@ role = os.environ['IAM_ROLE_NAME']
 # bucket = os.environ['BUCKET_NAME']
 # prefix = os.environ['PREFIX']
 bucket="sagemaker-pipeline-githubactions"
-prefix="pipeline_with_featurestore"
+prefix="pipeline-featurestore-final"
 model_package_group_name = "github-Churn-xgboost-model-grp-1"  # Model name in model registry
 
 pipeline_name = "githubChurnPipeline-1"
@@ -281,7 +281,7 @@ step_train_model = TrainingStep(
     },
 )
 
-#===================================================evaluate====================================================
+#===================================================evaluate=====================================
 
 from sagemaker.processing import ScriptProcessor
 from sagemaker.workflow.properties import PropertyFile
