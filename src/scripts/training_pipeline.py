@@ -106,6 +106,7 @@ dataset = dataset.drop(["api_invocation_time", "eventtime", "write_time", "is_de
 print(dataset.shape)
 
 
+
 #save the dataset to data folder
 dataset[:400:].to_csv("scripts/data/large/churn-dataset.csv",index=False)
 dataset[401::].to_csv("scripts/data/small/churn-dataset.csv",index=False)
@@ -138,7 +139,12 @@ training_instance_type = ParameterString(name="TrainingInstanceType", default_va
 # Where the input data is stored
 input_data = ParameterString(
     name="InputData",
-    default_value=small_input_data_uri,
+    default_value=large_input_data_uri,
+)
+
+test_data = ParameterString(
+    name="testData",
+    default_value=test_data_uri,
 )
 
 # What is the default status of the model when registering with model registry.
@@ -305,10 +311,16 @@ step_evaluate_model = ProcessingStep(
             source=step_train_model.properties.ModelArtifacts.S3ModelArtifacts,
             destination="/opt/ml/processing/model",
         ),
-        ProcessingInput(
-            source=test_data_uri,  # Use pre-created test data instead of output from processing step
-            destination="/opt/ml/processing/test",
+        "test": TrainingInput(
+            s3_data=step_preprocess_data.properties.ProcessingOutputConfig.Outputs[
+                "test"
+            ].S3Output.S3Uri,
+            content_type="text/csv",
         ),
+        # ProcessingInput(
+        #     source=test_data_uri, test_data # Use pre-created test data instead of output from processing step
+        #     destination="/opt/ml/processing/test",
+        # ),
     ],
     outputs=[
         ProcessingOutput(
