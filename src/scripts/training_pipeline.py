@@ -311,16 +311,13 @@ step_evaluate_model = ProcessingStep(
             source=step_train_model.properties.ModelArtifacts.S3ModelArtifacts,
             destination="/opt/ml/processing/model",
         ),
-        "test": TrainingInput(
-            s3_data=step_preprocess_data.properties.ProcessingOutputConfig.Outputs[
+        ProcessingInput(
+            source=step_preprocess_data.properties.ProcessingOutputConfig.Outputs[
                 "test"
             ].S3Output.S3Uri,
-            content_type="text/csv",
+              # Use pre-created test data instead of output from processing step
+            destination="/opt/ml/processing/test",
         ),
-        # ProcessingInput(
-        #     source=test_data_uri, test_data # Use pre-created test data instead of output from processing step
-        #     destination="/opt/ml/processing/test",
-        # ),
     ],
     outputs=[
         ProcessingOutput(
