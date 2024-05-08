@@ -74,7 +74,7 @@ bucket="sagemaker-pipeline-githubactions"
 prefix="pipeline-featurestore-final"
 model_package_group_name = "github-Churn-xgboost-model-grp-1"  # Model name in model registry
 
-pipeline_name = "githubChurnPipeline-1"
+pipeline_name = "ChurnPipeline"
 print(region)
 print(role)
 print(bucket)
@@ -82,10 +82,6 @@ print(prefix)
 
 current_working_directory = os.getcwd()
 print(current_working_directory)
-
-#Get the dataset from the feature Store
-from sagemaker.feature_store.feature_group import FeatureGroup
-from sagemaker.feature_store.inputs import FeatureParameter
 
 churn_feature_group_name="2churndata-feature-group-07-08-22-37"
 sagemaker_session = sagemaker.Session()
