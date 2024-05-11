@@ -31,16 +31,16 @@ from sagemaker.model_monitor.dataset_format import DatasetFormat
 sm_client = boto3.client(service_name="sagemaker")
 region = os.environ['AWS_DEFAULT_REGION']
 role = os.environ['AWS_SAGEMAKER_ROLE']
-testbucket = os.environ['AWS_TEST_BUCKET']
-
+# testbucket = os.environ['AWS_TEST_BUCKET']
+testbucket="mlops-demo-bucket1"
 sagemaker_session = sagemaker.Session()
-default_bucket = sagemaker_session.default_bucket()
-batch_data_uri = "s3://"
+# default_bucket = sagemaker_session.default_bucket()
+batch_data_uri = "s3://sagemaker-pipeline-githubactions/batch-data-folder/"
 batch_data = ParameterString(
     name="BatchData",
     default_value=batch_data_uri,
 )
-model_package_group_name = 'sklearn-check-model-reg'
+model_package_group_name = 'github-Churn-xgboost-model-grp-1'
 lambda_function_name = "get-latest-version"
 pipeline_name = "inference-pipeline"
 
@@ -122,6 +122,6 @@ pipeline = Pipeline(
     steps=[step_latest_model_fetch,step_process, step_infer],
 )
 
-import json
-definition = json.loads(pipeline.definition())
-pipeline.upsert(role_arn=role)
+# import json
+# definition = json.loads(pipeline.definition())
+# pipeline.upsert(role_arn=role)
