@@ -30,7 +30,7 @@ from sagemaker.model_monitor.dataset_format import DatasetFormat
 
 sm_client = boto3.client(service_name="sagemaker")
 region = os.environ['AWS_DEFAULT_REGION']
-role = os.environ['AWS_SAGEMAKER_ROLE']
+role = os.environ['IAM_ROLE_NAME']
 # testbucket = os.environ['AWS_TEST_BUCKET']
 testbucket="sagemaker-pipeline-githubactions"
 prefix="inference-data"
