@@ -54,12 +54,12 @@ def get_pipeline_session(region, default_bucket):
         sagemaker_client=sagemaker_client,
         default_bucket=default_bucket,
     )
-pipeline_session = get_pipeline_session(region, testbucket_bucket)
+pipeline_session = get_pipeline_session(region, testbucket)
 
 # Where the input data is stored
 input_data = ParameterString(
     name="InputData",
-    default_value=large_input_data_uri,
+    default_value=batch_data_uri,
 )
 
 from sagemaker.sklearn.processing import SKLearnProcessor
@@ -68,7 +68,7 @@ from sagemaker.workflow.steps import ProcessingStep
 from sagemaker.workflow.functions import Join
 from sagemaker.workflow.execution_variables import ExecutionVariables
 
-
+print("=========starting lambda step=========================")
 # Lambda helper class can be used to create the Lambda function
 func = Lambda(
     function_name=lambda_function_name,
