@@ -33,12 +33,12 @@ if __name__ == "__main__":
         tar.extractall(path=".")
 
     logger.debug("Loading model.")
-    model = joblib.load("model.joblib")
+    model = joblib.load("xgboost-model.joblib")
 
     logger.debug("Reading input data.")
 
     # Get input file list
-    X_test = pd.read_csv(f'/opt/ml/processing/test/test_features.csv',header=None)
+    X_test = pd.read_csv(f'/opt/ml/processing/batchtest/test.csv',header=None)
     predictions = model.predict(X_test)
 
     csv_buffer3 = StringIO()

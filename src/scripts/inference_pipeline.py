@@ -32,7 +32,8 @@ sm_client = boto3.client(service_name="sagemaker")
 region = os.environ['AWS_DEFAULT_REGION']
 role = os.environ['AWS_SAGEMAKER_ROLE']
 # testbucket = os.environ['AWS_TEST_BUCKET']
-testbucket="mlops-demo-bucket1"
+testbucket="sagemaker-pipeline-githubactions"
+prefix="inference-data"
 sagemaker_session = sagemaker.Session()
 # default_bucket = sagemaker_session.default_bucket()
 batch_data_uri = "s3://sagemaker-pipeline-githubactions/batch-data-folder/"
@@ -53,7 +54,20 @@ def get_pipeline_session(region, default_bucket):
         sagemaker_client=sagemaker_client,
         default_bucket=default_bucket,
     )
-pipeline_session = get_pipeline_session(region, default_bucket)
+pipeline_session = get_pipeline_session(region, testbucket_bucket)
+
+# Where the input data is stored
+input_data = ParameterString(
+    name="InputData",
+    default_value=large_input_data_uri,
+)
+
+from sagemaker.sklearn.processing import SKLearnProcessor
+from sagemaker.processing import ProcessingInput, ProcessingOutput
+from sagemaker.workflow.steps import ProcessingStep
+from sagemaker.workflow.functions import Join
+from sagemaker.workflow.execution_variables import ExecutionVariables
+
 
 # Lambda helper class can be used to create the Lambda function
 func = Lambda(
@@ -79,22 +93,73 @@ step_latest_model_fetch = LambdaStep(
     ],
 )
 
-
+print("=====================Starting the processing step===========================")
+# sklearn_processor = SKLearnProcessor(
+#     framework_version="1.2-1", role=role, instance_type="ml.t3.medium", instance_count=1
+# )
 sklearn_processor = SKLearnProcessor(
-    framework_version="1.2-1", role=role, instance_type="ml.t3.medium", instance_count=1
+    framework_version="0.23-1",
+    role=role,
+    instance_type="ml.t3.medium",
+    instance_count=1,
+    base_job_name="inference-churn-processing-job",
 )
 
 step_process = ProcessingStep(
     name="LoadInferenceData",
-    code="scripts/process.py",
     processor=sklearn_processor,
-    outputs=[
-        ProcessingOutput(output_name="inference", source="/opt/ml/processing/inference")
+    inputs=[
+        ProcessingInput(source=batch_data, destination="/opt/ml/processing/batchinput"),
     ],
-    job_arguments = ['--train-test-split-ratio', '0.2', 
-    '--testbucket', testbucket
-    ]
+    outputs=[
+        ProcessingOutput(
+            output_name="inference",
+            source="/opt/ml/processing/batchtest",
+            destination=Join(
+                on="/",
+                values=[
+                    "s3://{}".format(testbucket),
+                    prefix,
+                    ExecutionVariables.PIPELINE_EXECUTION_ID,
+                    "batchtest",
+                ],
+            ),
+        ),
+    ],
+    code="scripts/process.py",
 )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# step_process = ProcessingStep(
+#     name="LoadInferenceData",
+#     code="scripts/process.py",
+#     processor=sklearn_processor,
+#     outputs=[
+#         ProcessingOutput(output_name="inference", source="/opt/ml/processing/inference")
+#     ],
+#     job_arguments = ['--train-test-split-ratio', '0.2', 
+#     '--testbucket', testbucket
+#     ]
+# )
 
 step_infer = ProcessingStep(
     name="Inference",
@@ -107,7 +172,7 @@ step_infer = ProcessingStep(
                 ),
             ProcessingInput(
                 source=step_process.properties.ProcessingOutputConfig.Outputs["inference"].S3Output.S3Uri, 
-                destination="/opt/ml/processing/test"
+                destination="/opt/ml/processing/batchtest"
                 )
     ],
     job_arguments = ['--testbucket', testbucket
@@ -122,6 +187,20 @@ pipeline = Pipeline(
     steps=[step_latest_model_fetch,step_process, step_infer],
 )
 
-# import json
-# definition = json.loads(pipeline.definition())
+import json
+definition = json.loads(pipeline.definition())
+pipeline.upsert(role_arn=role)
+
+
+print("============================pipeline triggered=====================================")
+# # Submit pipline
 # pipeline.upsert(role_arn=role)
+
+# # Execute pipeline using the default parameters.
+execution = pipeline.start()
+
+execution.wait()
+
+# # List the execution steps to check out the status and artifacts:
+execution.list_steps()
+print("============================pipeline execution completed=====================================")

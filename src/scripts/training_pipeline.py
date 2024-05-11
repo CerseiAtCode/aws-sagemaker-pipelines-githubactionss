@@ -418,16 +418,16 @@ pipeline = Pipeline(
 )
 
 print("============================pipeline triggered=====================================")
-# Submit pipline
-pipeline.upsert(role_arn=role)
+# # Submit pipline
+# pipeline.upsert(role_arn=role)
 
-# Execute pipeline using the default parameters.
-execution = pipeline.start()
+# # Execute pipeline using the default parameters.
+# execution = pipeline.start()
 
-execution.wait()
+# execution.wait()
 
-# List the execution steps to check out the status and artifacts:
-execution.list_steps()
+# # List the execution steps to check out the status and artifacts:
+# execution.list_steps()
 print("============================pipeline execution completed=====================================")
 
 
