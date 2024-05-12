@@ -110,10 +110,11 @@ from sagemaker import ModelPackage
 model = ModelPackage(
     role=role, model_package_arn=model_package_arn, sagemaker_session=sagemaker_session
 )
-
+import time
+from time import gmtime, strftime
 endpoint_name = "pipeline-endpoint-" + time.strftime("%Y-%m-%d-%H-%M-%S", time.gmtime())
 print("EndpointName= {}".format(endpoint_name))
-model.deploy(initial_instance_count=1, instance_type="ml.m5.xlarge", endpoint_name=endpoint_name)
+# model.deploy(initial_instance_count=1, instance_type="ml.m5.xlarge", endpoint_name=endpoint_name)
 
 
 
