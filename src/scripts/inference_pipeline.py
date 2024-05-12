@@ -106,6 +106,7 @@ print(model_package_arn)
 model_url=model_description['InferenceSpecification']['Containers'][0]['ModelDataUrl']
 print("model_url:",model_url)
 #deploying the model
+from sagemaker import ModelPackage
 model = ModelPackage(
     role=role, model_package_arn=model_package_arn, sagemaker_session=sagemaker_session
 )
