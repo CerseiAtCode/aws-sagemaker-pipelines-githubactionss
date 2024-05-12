@@ -196,7 +196,7 @@ step_infer = ProcessingStep(
     processor=sklearn_processor,
     inputs=[
             ProcessingInput(
-                source=step_latest_model_fetch.properties.Outputs["ModelUrl"],
+                source=model_url,
                 destination="/opt/ml/processing/model",
                 ),
             ProcessingInput(
@@ -213,7 +213,7 @@ pipeline = Pipeline(
     parameters=[
         batch_data,
     ],
-    steps=[step_latest_model_fetch,step_process, step_infer],
+    steps=[step_process, step_infer],
 )
 
 import json
