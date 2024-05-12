@@ -68,30 +68,57 @@ from sagemaker.workflow.steps import ProcessingStep
 from sagemaker.workflow.functions import Join
 from sagemaker.workflow.execution_variables import ExecutionVariables
 
-print("=========starting lambda step=========================")
+print("=========starting get latest model step=========================")
 # Lambda helper class can be used to create the Lambda function
-func = Lambda(
-    function_name=lambda_function_name,
-    execution_role_arn=role,
-    script="scripts/lambda_step_code.py",
-    handler="lambda_step_code.handler",
-    timeout=600,
-    memory_size=128,
+# func = Lambda(
+#     function_name=lambda_function_name,
+#     execution_role_arn=role,
+#     script="scripts/lambda_step_code.py",
+#     handler="lambda_step_code.handler",
+#     timeout=600,
+#     memory_size=128,
+# )
+
+# step_latest_model_fetch = LambdaStep(
+#     name="fetchLatestModel",
+#     lambda_func=func,
+#     inputs={
+#         "model_package_group_name": model_package_group_name,
+#     },
+#     outputs=[
+#         LambdaOutput(output_name="ModelUrl", output_type=LambdaOutputTypeEnum.String), 
+#         LambdaOutput(output_name="ImageUri", output_type=LambdaOutputTypeEnum.String), 
+#         LambdaOutput(output_name="BaselineStatisticsS3Uri", output_type=LambdaOutputTypeEnum.String), 
+#         LambdaOutput(output_name="BaselineConstraintsS3Uri", output_type=LambdaOutputTypeEnum.String), 
+#     ],
+# )
+from utils import get_approved_package
+sm_client = boto3.client("sagemaker")
+
+pck = get_approved_package(
+    model_package_group_name
+)  # Reminder: model_package_group_name was defined as "NominetAbaloneModelPackageGroupName" at the beginning of the pipeline definition
+model_description = sm_client.describe_model_package(ModelPackageName=pck["ModelPackageArn"])
+
+# model_description
+model_package_arn = model_description["ModelPackageArn"]
+print(model_package_arn)
+model_url=model_description['InferenceSpecification']['Containers'][0]['ModelDataUrl']
+print("model_url:",model_url)
+#deploying the model
+model = ModelPackage(
+    role=role, model_package_arn=model_package_arn, sagemaker_session=sagemaker_session
 )
 
-step_latest_model_fetch = LambdaStep(
-    name="fetchLatestModel",
-    lambda_func=func,
-    inputs={
-        "model_package_group_name": model_package_group_name,
-    },
-    outputs=[
-        LambdaOutput(output_name="ModelUrl", output_type=LambdaOutputTypeEnum.String), 
-        LambdaOutput(output_name="ImageUri", output_type=LambdaOutputTypeEnum.String), 
-        LambdaOutput(output_name="BaselineStatisticsS3Uri", output_type=LambdaOutputTypeEnum.String), 
-        LambdaOutput(output_name="BaselineConstraintsS3Uri", output_type=LambdaOutputTypeEnum.String), 
-    ],
-)
+endpoint_name = "pipeline-endpoint-" + time.strftime("%Y-%m-%d-%H-%M-%S", time.gmtime())
+print("EndpointName= {}".format(endpoint_name))
+model.deploy(initial_instance_count=1, instance_type="ml.m5.xlarge", endpoint_name=endpoint_name)
+
+
+
+
+
+
 
 print("=====================Starting the processing step===========================")
 # sklearn_processor = SKLearnProcessor(
@@ -197,10 +224,10 @@ print("============================pipeline triggered===========================
 # pipeline.upsert(role_arn=role)
 
 # # Execute pipeline using the default parameters.
-execution = pipeline.start()
+# execution = pipeline.start()
 
-execution.wait()
+# execution.wait()
 
-# # List the execution steps to check out the status and artifacts:
-execution.list_steps()
+# # # List the execution steps to check out the status and artifacts:
+# execution.list_steps()
 print("============================pipeline execution completed=====================================")
