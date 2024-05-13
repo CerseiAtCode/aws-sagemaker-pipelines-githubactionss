@@ -11,6 +11,7 @@ import argparse
 import boto3
 import joblib
 import sys
+import xgboost
 from io import StringIO
 os.system(f"{sys.executable} -m pip install s3fs")
 os.system(f"{sys.executable} -m pip install fsspec")
@@ -30,15 +31,16 @@ if __name__ == "__main__":
     s3 = boto3.resource('s3')
     model_path = "/opt/ml/processing/model/model.tar.gz"
     with tarfile.open(model_path) as tar:
-        tar.extractall(path=".")
+        tar.extractall(path="model_folder")
 
     logger.debug("Loading model.")
-    model = joblib.load("xgboost-model.joblib")
+    model = joblib.load("model_folder/xgboost-model")
 
     logger.debug("Reading input data.")
 
     # Get input file list
-    X_test = pd.read_csv(f'/opt/ml/processing/batchtest/test.csv',header=None)
+    df = pd.read_csv(f'/opt/ml/processing/batchtest/test.csv',header=None)
+    X_test = xgboost.DMatrix(df.values)
     predictions = model.predict(X_test)
 
     csv_buffer3 = StringIO()

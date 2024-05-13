@@ -48,5 +48,5 @@ jobs:
         # AWS_TEST_BUCKET: ${{ secrets.AWS_TEST_BUCKET }}
       working-directory: ./src
       run: |
-        pip install --no-cache-dir --upgrade awscli boto3 sagemaker joblib s3fs fsspec 
+        pip install --no-cache-dir --upgrade awscli boto3 sagemaker joblib s3fs fsspec xgboost
         python scripts/inference_pipeline.py 
