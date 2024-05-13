@@ -129,7 +129,7 @@ logger.setLevel(logging.INFO)
 if __name__ == "__main__":
     logger.info("Starting preprocessing.")
 
-    input_data_path = os.path.join("/opt/ml/processing/batchinput", "batch-data.csv")
+    input_data_path = os.path.join("/opt/ml/processing/batchinput", "batchdata.csv")
 
     try:
         # os.makedirs("/opt/ml/processing/train")
@@ -144,6 +144,7 @@ if __name__ == "__main__":
     df = pd.read_csv(input_data_path)
 
     # drop the "Phone" feature column
+
     df = df.drop(["phone"], axis=1)
 
     # Change the data type of "Area Code"
@@ -176,4 +177,4 @@ if __name__ == "__main__":
     # validation_data.to_csv(
     #     "/opt/ml/processing/validation/validation.csv", header=False, index=False
     # )
-    test_data.to_csv("/opt/ml/processing/batchtest/test.csv", header=False, index=False)
+    train_data.to_csv("/opt/ml/processing/batchtest/test.csv", header=False, index=False)
